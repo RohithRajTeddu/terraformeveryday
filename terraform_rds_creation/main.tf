@@ -11,6 +11,8 @@ resource "aws_db_instance" "rds_db" {
   username          =    "admin"
   password          =    "rohith123"
   parameter_group_name = "default.mysql8.0"
+  skip_final_snapshot = false
+  final_snapshot_identifier = "rds-db-final-snapshot"
   db_subnet_group_name = aws_db_subnet_group.subnetgroup.id
   vpc_security_group_ids = [aws_security_group.SG_rds.id]
 
@@ -129,5 +131,7 @@ resource "aws_db_instance" "read_replica" {
   replicate_source_db = aws_db_instance.rds_db.arn
   instance_class = "db.t4g.micro"
   identifier = "database-replica"
+  final_snapshot_identifier = "your-snapshot-name"
+  skip_final_snapshot = true
   depends_on = [ aws_security_group.SG_rds ]
 }
